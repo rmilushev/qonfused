@@ -1,6 +1,6 @@
 {
-  "name": "phaser-boilerplate",
-  "description": "A catch-all Gulp setup for most projects.",
+  "name": "qonfused",
+  "description": "The player enters in a dark room. The only light is from a little lighter, with narrow ray of light. Keys are used to direct the light an reveal the objects of the landscape.",
   "main": "gulpfile.js",
   "dependencies": {
     "gulp": "^3.8.6"
@@ -22,6 +22,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "James Abels",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vertbranding/qonfused.git"
+  },
+  "author": "mmilkov, vertbranding, valio, ivaylo",
   "license": "MIT"
 }

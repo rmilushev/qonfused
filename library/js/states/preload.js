@@ -1,19 +1,71 @@
 // Preload State
 PhaserBp.Preload = function(game) {
-  console.log("Load State Initiated");
+	console.log("Load State Initiated");
+  	
+  	this.background = null;
+    this.preloadBar = null;
+
+    this.ready = false;
 };
 
 PhaserBp.Preload.prototype = {
 
 	preload: function () {
-    this.load.image('renderTest', 'library/assets/images/megaman.png');
+		// These are the assets we loaded in Boot.js
+        // A nice sparkly background and a loading progress bar
+
+        // If you want background, uncomment 
+        //this.background = this.add.sprite(0, 0, 'preloaderBackground');
+        
+        this.preloadBar = this.add.sprite(gameWidth / 2 - 193 / 2, 
+        	gameHeight / 2 - 382 / 2, 'preloaderBar'); // center preload sprite gamewidth / 2 - sprite.width / 2
+        	
+        // This sets the preloadBar sprite as a loader sprite.
+        // What that does is automatically crop the sprite from 0 to full-width
+        // as the files below are loaded in.
+        this.load.setPreloadSprite(this.preloadBar);
+        	
+        // Here we load the rest of the assets our game needs.
+        this.load.image('menuBg', 'assets/imgages/menu_background.png'); // MainMenu background image
+        this.load.image('playButton', 'assets/images/play_button.png'); // Play button image for MainMenu
+        this.load.audio('menuMusic', ['assets/audio/main_menu_undiscovered.mp3']); // Music for MainMenu
+        this.load.image('btnMusicPause', 'assets/images/btn-musicpause.png'); // MainMenu music stop button
+        this.load.image('btnMusicPlay', 'assets/images/btn-musicplay.png'); // MainMenu music play button
+
+        this.load.image('gameBg', 'assets/img/game_background.png'); // Game background image
+        this.load.atlasJSONHash('fly', 'assets/sprites/fly.png', 'assets/sprites/fly.json'); // Fly sprite json
+        
+        //this.load.image('splash', 'assets/img/splash.png'); // Splash image
+
+        this.load.image('btnPause', 'assets/images/btn-pause.png'); // Game pause button
+        this.load.image('btnPlay', 'assets/images/btn-play.png'); // Game unpause button
+
+        // Fonts
+        
+       // + lots of other required assets here
+       
+    	this.load.image('renderTest', 'library/assets/images/megaman.png');
 	},
 
 	create: function () {
-
+		// Once the load has finished we disable the crop because we're going to sit in the update loop for a short while as the music decodes
+        this.preloadBar.cropEnabled = false;
 	},
 
 	update: function () {
-    this.state.start('Game');
+		// You don't actually need to do this, but I find it gives a much smoother game experience.
+        // Basically it will wait for our audio file to be decoded before proceeding to the MainMenu.
+        // You can jump right into the menu if you want and still play the music, but you'll have a few
+        // seconds of delay while the mp3 decodes - so if you need your music to be in-sync with your menu
+        // it's best to wait for it to decode here first, then carry on.
+
+        // If you don't have any music in your game then put the game.state.start line into the create function and delete
+        // the update function completely.
+
+        if (this.cache.isSoundDecoded('menuMusic') && this.ready === false) {
+            this.ready = true;
+            this.state.start('MainMenu');
+        }
+    	//this.state.start('Game');
 	}
 };
